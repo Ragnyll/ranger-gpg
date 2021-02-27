@@ -4,12 +4,10 @@
 ![ranger-gpg](assets/ex.gif)
 
 ## Requirements
-&nbsp;&nbsp;&nbsp;&nbsp;A `default-key` conf option must be set in `~/.gnupg/gpg.conf` in order to state what public key to encrypt with.
-
-Ex: `~/.gnupg/gpg.conf`
+&nbsp;&nbsp;&nbsp;&nbsp;The default recipient must be set in the `DEFAULT_RECIPIENT` environment variable. I suggest the variable be set in one of you shell config files (eg. `zshenv` or `bashenv`).
 
 ```
-default-key PGP_PUBLIC_KEY_ID
+export DEFAULT_RECIPIENT="email@email.com"
 ```
 
 ## Usage

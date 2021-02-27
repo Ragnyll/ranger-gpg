@@ -27,24 +27,12 @@ class encrypt(Command):
 
         return output_path
 
-    def get_default_pub_key(self, gpg_home):
-        """
-
-        returns False if the default_key was not found
-        """
-        with open(os.path.join(gpg_home, 'gpg.conf'), 'r') as gpg_conf:
-            line = [line for line in gpg_conf.readlines() if 'default-key' in line]
-            if not line:
-                return False
-
-        return line[0].split(' ')[1][:-1]
-
     def execute(self):
         gpg_home = os.path.join(os.path.expanduser('~'), '.gnupg/')
-        default_key = self.get_default_pub_key(gpg_home)
+        default_recpipient = os.environ['DEFAULT_RECIPIENT']
 
-        if not default_key:
-            self.fm.notify('default-key configuration could not be found in ~/.gnupg/gpg.conf')
+        if not default_recpipient:
+            self.fm.notify('DEFAULT_RECIPIENT environment variable must be set')
             return
 
         gpg = GPG(gpgbinary='/usr/bin/gpg', gnupghome=gpg_home)
@@ -58,7 +46,7 @@ class encrypt(Command):
                 p = new_p
 
             with open(p, 'rb') as f:
-                enc = gpg.encrypt_file(f, default_key)
+                enc = gpg.encrypt_file(f, default_recpipient)
 
             with open(p + '.gpg', 'wb+') as out:
                 out.write(enc.data)
